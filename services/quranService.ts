@@ -190,3 +190,52 @@ export const fetchSurahDetails = async (surahNumber: number, editionIdentifier: 
         throw error; 
     }
 };
+
+// Fetches details (Ayahs, Audio, Translation) for a specific Juz
+export const fetchJuzDetails = async (juzNumber: number, editionIdentifier: string = 'id.indonesian'): Promise<Ayah[]> => {
+    // Cache key includes edition
+    const cacheKey = `quran_juz_${juzNumber}_${editionIdentifier}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) {
+            localStorage.removeItem(cacheKey);
+        }
+    }
+
+    try {
+        // Fetch Audio/Arabic (Alafasy) and Translation for Juz
+        // Juz endpoint returns the whole juz which might span multiple surahs.
+        // We assume structure matches.
+        const [arabicResponse, transResponse] = await Promise.all([
+            retryFetch(`${API_BASE}/juz/${juzNumber}/ar.alafasy`),
+            retryFetch(`${API_BASE}/juz/${juzNumber}/${editionIdentifier}`)
+        ]);
+
+        if (!arabicResponse.ok) throw new Error(`Arabic fetch error: ${arabicResponse.status}`);
+        if (!transResponse.ok) throw new Error(`Translation fetch error: ${transResponse.status}`);
+        
+        const arabicData = await arabicResponse.json();
+        const transData = await transResponse.json();
+
+        if (arabicData.code === 200 && transData.code === 200) {
+            const ayahs: Ayah[] = arabicData.data.ayahs.map((ayah: any, index: number) => ({
+                ...ayah,
+                translation: transData.data.ayahs[index] ? transData.data.ayahs[index].text : ''
+            }));
+            
+            try {
+                localStorage.setItem(cacheKey, JSON.stringify(ayahs));
+            } catch (e) {
+                console.warn("LocalStorage full");
+            }
+            return ayahs;
+        }
+        throw new Error('API Error: Failed to fetch Juz details');
+    } catch (error) {
+        console.error("fetchJuzDetails error:", error);
+        throw error; 
+    }
+};
