@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-      base: './', // Essential for GitHub Pages / subdirectory deployment
+      base: '/Hijri/', // <- penting: gunakan /NAMA_REPO/ untuk GitHub Pages per-repo
       server: {
         port: 3000,
         host: '0.0.0.0',
