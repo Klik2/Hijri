@@ -213,6 +213,7 @@ export interface Ayah {
     sajda: boolean | { id: number; recommended: boolean; obligatory: boolean };
     audio: string;
     translation?: string;
+    latin?: string;
 }
 
 export interface UserProfile {
@@ -223,3 +224,12 @@ export interface UserProfile {
 }
 
 export type AppView = 'calendar' | 'prayer' | 'qibla' | 'doa' | 'quran';
+
+export type DoaItem = {
+    no: number;
+    judul: string;
+    arab: string;
+    artinya: string;
+    referensi: string;
+    latin?: string;
+};
