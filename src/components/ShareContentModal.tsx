@@ -90,15 +90,15 @@ export const ShareContentModal: React.FC<ShareContentModalProps> = ({ isOpen, on
 
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-[70] p-4 fade-in" onClick={onClose}>
-            <div className={`border border-[#00ffdf]/30 rounded-xl w-full max-w-md flex flex-col relative max-h-[90vh] ${isLight ? 'bg-gray-100 text-gray-900' : 'bg-[#00352e] text-white'}`} onClick={e => e.stopPropagation()}>
-                <div className={`p-4 border-b ${isLight ? 'border-gray-300' : 'border-[#00ffdf]/20'} flex justify-between items-center shrink-0`}>
+            <div className={`border border-[#00ffdf]/30 rounded-xl w-full max-w-md flex flex-col relative ${isLight ? 'bg-gray-100 text-gray-900' : 'bg-[#00352e] text-white'}`} onClick={e => e.stopPropagation()}>
+                <div className={`p-4 border-b ${isLight ? 'border-gray-300' : 'border-[#00ffdf]/20'} flex justify-between items-center`}>
                     <h3 className="font-bold">Bagikan</h3>
                     <button onClick={onClose}><CloseIcon className="w-5 h-5 opacity-70" /></button>
                 </div>
 
-                <div className="p-4 flex-1 overflow-y-auto flex flex-col">
+                <div className="p-4">
                     {/* Mode Selector */}
-                    <div className={`flex gap-2 mb-4 p-1 rounded-lg shrink-0 ${isLight ? 'bg-gray-200' : 'bg-black/30'}`}>
+                    <div className={`flex gap-2 mb-4 p-1 rounded-lg ${isLight ? 'bg-gray-200' : 'bg-black/30'}`}>
                         <button 
                             onClick={() => setMode('text')}
                             className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${mode === 'text' ? (isLight ? 'bg-white shadow text-cyan-700' : 'bg-[#00ffdf] text-[#002b25]') : 'opacity-50'}`}
@@ -114,7 +114,7 @@ export const ShareContentModal: React.FC<ShareContentModalProps> = ({ isOpen, on
                     </div>
 
                     {mode === 'image' && (
-                        <div className="mb-4 shrink-0">
+                        <div className="mb-4">
                             <label className="text-xs opacity-70 block mb-1">Zoom Size Font (+/-)</label>
                             <input 
                                 type="range" 
@@ -128,7 +128,7 @@ export const ShareContentModal: React.FC<ShareContentModalProps> = ({ isOpen, on
                         </div>
                     )}
 
-                    <div className={`rounded-lg p-4 overflow-y-auto border flex justify-center ${isLight ? 'bg-gray-200 border-gray-300' : 'bg-black/20 border-[#00ffdf]/10'}`}>
+                    <div className={`rounded-lg p-4 max-h-[50vh] overflow-y-auto border flex justify-center ${isLight ? 'bg-gray-200 border-gray-300' : 'bg-black/20 border-[#00ffdf]/10'}`}>
                         <div 
                             ref={previewRef}
                             className={`p-6 rounded-xl border-2 w-full max-w-sm ${containerClass}`}
@@ -155,7 +155,7 @@ export const ShareContentModal: React.FC<ShareContentModalProps> = ({ isOpen, on
                     <button 
                         onClick={handleShare}
                         disabled={isProcessing}
-                        className={`w-full mt-4 py-3 font-bold rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shrink-0 ${isLight ? 'bg-cyan-600 hover:bg-cyan-700 text-white' : 'bg-[#00ffdf] hover:bg-cyan-400 text-[#002b25]'}`}
+                        className={`w-full mt-4 py-3 font-bold rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-95 ${isLight ? 'bg-cyan-600 hover:bg-cyan-700 text-white' : 'bg-[#00ffdf] hover:bg-cyan-400 text-[#002b25]'}`}
                     >
                         {isProcessing ? 'Memproses...' : (
                             <>
