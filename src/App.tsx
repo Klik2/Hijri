@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { Location, CalendarData, Day, CountdownTarget, NextPrayer, PrayerTimes, PrayerName, CustomEvent, HijriDate, UserSettings, Theme, AlarmSettings, FilterSettings, CustomHijriEvent, SunnahFastingNotifications, AdhanAlarms, CalendarFormat, AlarmSound, AppView, UserProfile } from './types';
 import { fetchCalendarData, getNextCountdownTarget, fetchLocationAndPrayerTimes, convertGToH, fetchHijriHolidays, convertHijriToGregorian, getSpecificCountdownTarget } from './services/calendarService';
@@ -391,11 +390,20 @@ const PrayerInfo: React.FC<{
         <div className="space-y-6">
             {/* Next Prayer - Conditional */}
             {showCountdown && (
-                <div className="bg-gradient-to-r from-cyan-900 to-blue-900 p-4 rounded-xl border border-cyan-500/30 text-center relative overflow-hidden shadow-lg transform hover:scale-[1.02] transition-transform">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-500/20 rounded-full blur-xl"></div>
-                    <p className="text-sm text-cyan-200 uppercase tracking-widest font-bold mb-1">Waktu Shalat Berikutnya</p>
-                    <h3 className="text-3xl font-bold text-white my-2">{nextPrayer.name === 'Sunrise' ? 'Syuruk' : nextPrayer.name || '--'}</h3>
-                    <div className="text-4xl font-mono font-bold text-yellow-400 tracking-wider drop-shadow-md">{nextPrayer.countdown || '--:--:--'}</div>
+                <div className="bg-gradient-to-r from-teal-900 to-emerald-900 p-6 rounded-2xl border border-teal-500/30 text-center relative overflow-hidden shadow-2xl transform hover:scale-[1.01] transition-transform">
+                    {/* Background Elements */}
+                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-teal-500/20 rounded-full blur-2xl animate-pulse"></div>
+                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl animate-pulse"></div>
+
+                    <div className="relative z-10 flex flex-col items-center">
+                        <h3 className="text-5xl md:text-6xl font-bold text-white tracking-tight drop-shadow-lg font-clock mb-2">
+                            {nextPrayer.time || '--:--'}
+                        </h3>
+                        <p className="text-sm md:text-base text-teal-200 font-medium tracking-wide">
+                            {`± ${nextPrayer.countdown} menuju waktu ${nextPrayer.name === 'Sunrise' ? 'Syuruk' : (PRAYER_NAMES_TRANSLATION['id'][nextPrayer.name as string] || nextPrayer.name)}`}
+                        </p>
+                    </div>
                 </div>
             )}
 
@@ -805,8 +813,15 @@ const App: React.FC = () => {
     const handleAlarmTimeChange = (name: string, time: string) => setAlarmSettings(prev => ({ ...prev, [name]: { ...prev[name as keyof AlarmSettings], time } }));
     const handleAlarmSoundChange = (s: AlarmSound) => setAlarmSound(s);
     const playAlarmSound = (s: AlarmSound) => { 
+        // Suppress generic play() error
         const audio = new Audio(s === 'thaha' ? 'https://server8.mp3quran.net/thubti/001.mp3' : 'https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3');
-        audio.play().catch(console.error);
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Auto-play was prevented. This is expected if user interaction hasn't occurred.
+                console.warn("Auto-play prevented by browser policy.");
+            });
+        }
     };
     const handleAdhanAlarmToggle = (name: PrayerName) => setAdhanAlarms(prev => ({ ...prev, [name]: { isOn: !prev[name]?.isOn } }));
     const handleAdhanChange = (s: string) => setSelectedAdhan(s);
