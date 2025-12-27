@@ -19,4 +19,4 @@ View your app in AI Studio: https://ai.studio/apps/drive/1HGBH37r3wFRdwXyQeurOdl
 3. Run the app:
    `npm run dev`
 
-   update v1
+   update v.1
