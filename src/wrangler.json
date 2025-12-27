@@ -1,0 +1,7 @@
+{
+  "name": "hijri",
+  "compatibility_date": "2024-12-27",
+  "assets": {
+    "directory": "./dist"
+  }
+}
