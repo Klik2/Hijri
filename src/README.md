@@ -21,3 +21,5 @@ View your app in AI Studio: https://ai.studio/apps/drive/1HGBH37r3wFRdwXyQeurOdl
 
    update v.1
    
+validation-key :
+9e186c66259d6b34859032c8a95b5bd562f3a7f2789d0806eb96df2f2114569fc2add7e330d725bcc8fc05a343ea05812ac20a062058b39888006ee3e08451be
